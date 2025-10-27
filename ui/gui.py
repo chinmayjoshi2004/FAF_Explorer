@@ -12,6 +12,9 @@ import threading
 import queue
 from PIL import Image, ImageTk  # For icons
 
+# Import logging
+from faf_explorer.logger import get_logger
+
 # Add parent directory to path to import core modules
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -21,6 +24,9 @@ class FAFExplorerGUI:
     """Main GUI application class for FAF Explorer"""
 
     def __init__(self, root):
+        # Initialize logger
+        self.logger = get_logger("gui")
+
         self.root = root
         self.root.title("FAF Explorer - File and Folder Manager")
         self.root.geometry("1000x700")
@@ -53,6 +59,8 @@ class FAFExplorerGUI:
         self.root.bind('<Delete>', lambda e: self.delete_item())
         self.root.bind('<F5>', lambda e: self.refresh_tree())
         self.root.bind('<Control-f>', lambda e: self.focus_search())
+
+        self.logger.info("FAF Explorer GUI initialized")
 
     def create_menu(self):
         """Create the main menu bar"""
