@@ -1,0 +1,991 @@
+{
+  "file_operations": [
+    {
+      "operation": "create_file",
+      "purpose": "Creates a new file at the specified path with optional initial content.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path where the file should be created, including filename and extension."
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "required": false,
+          "description": "Initial content to write to the file. Defaults to empty string."
+        },
+        {
+          "name": "overwrite",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to overwrite the file if it already exists. Defaults to false."
+        }
+      ],
+      "cli_command": "faf create-file --path <path> [--content <content>] [--overwrite]",
+      "return_value": "Success status (boolean) and file path on success, or error message on failure.",
+      "errors": [
+        "File already exists (if overwrite=false)",
+        "permission denied",
+        "invalid path"
+      ]
+    },
+    {
+      "operation": "read_file",
+      "purpose": "Reads the contents of an existing file.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the file to read."
+        },
+        {
+          "name": "encoding",
+          "type": "string",
+          "required": false,
+          "description": "Character encoding (e.g., 'utf-8'). Defaults to system default."
+        }
+      ],
+      "cli_command": "faf read-file --path <path> [--encoding <encoding>]",
+      "return_value": "File contents as string on success, or error message on failure.",
+      "errors": [
+        "File not found",
+        "permission denied",
+        "invalid path"
+      ]
+    },
+    {
+      "operation": "write_file",
+      "purpose": "Writes content to an existing file, optionally appending or overwriting.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the file to write to."
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "required": true,
+          "description": "Content to write to the file."
+        },
+        {
+          "name": "mode",
+          "type": "string",
+          "required": false,
+          "description": "Write mode ('w' for overwrite, 'a' for append). Defaults to 'w'."
+        },
+        {
+          "name": "encoding",
+          "type": "string",
+          "required": false,
+          "description": "Character encoding. Defaults to system default."
+        }
+      ],
+      "cli_command": "faf write-file --path <path> --content <content> [--mode <mode>] [--encoding <encoding>]",
+      "return_value": "Success status (boolean) and bytes written on success, or error message on failure.",
+      "errors": [
+        "File not found",
+        "permission denied",
+        "invalid path"
+      ]
+    },
+    {
+      "operation": "delete_file",
+      "purpose": "Deletes an existing file.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the file to delete."
+        },
+        {
+          "name": "force",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to force deletion even if file is read-only. Defaults to false."
+        }
+      ],
+      "cli_command": "faf delete-file --path <path> [--force]",
+      "return_value": "Success status (boolean) on success, or error message on failure.",
+      "errors": [
+        "File not found",
+        "permission denied",
+        "file in use"
+      ]
+    },
+    {
+      "operation": "copy_file",
+      "purpose": "Copies a file from source to destination.",
+      "parameters": [
+        {
+          "name": "source_path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the source file."
+        },
+        {
+          "name": "destination_path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the destination file."
+        },
+        {
+          "name": "overwrite",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to overwrite destination if it exists. Defaults to false."
+        }
+      ],
+      "cli_command": "faf copy-file --source <source_path> --destination <destination_path> [--overwrite]",
+      "return_value": "Success status (boolean) and destination path on success, or error message on failure.",
+      "errors": [
+        "Source file not found",
+        "destination exists (if overwrite=false)",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "move_file",
+      "purpose": "Moves a file from source to destination (equivalent to rename if same directory).",
+      "parameters": [
+        {
+          "name": "source_path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the source file."
+        },
+        {
+          "name": "destination_path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the destination file."
+        },
+        {
+          "name": "overwrite",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to overwrite destination if it exists. Defaults to false."
+        }
+      ],
+      "cli_command": "faf move-file --source <source_path> --destination <destination_path> [--overwrite]",
+      "return_value": "Success status (boolean) and new path on success, or error message on failure.",
+      "errors": [
+        "Source file not found",
+        "destination exists (if overwrite=false)",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "get_file_info",
+      "purpose": "Retrieves metadata about a file.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the file."
+        }
+      ],
+      "cli_command": "faf get-file-info --path <path>",
+      "return_value": "Dictionary/object containing size, creation date, modification date, permissions, etc., or error message on failure.",
+      "errors": [
+        "File not found",
+        "permission denied"
+      ]
+    }
+  ],
+  "folder_operations": [
+    {
+      "operation": "create_folder",
+      "purpose": "Creates a new directory at the specified path.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path where the folder should be created."
+        },
+        {
+          "name": "parents",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to create parent directories if they don't exist. Defaults to false."
+        }
+      ],
+      "cli_command": "faf create-folder --path <path> [--parents]",
+      "return_value": "Success status (boolean) and folder path on success, or error message on failure.",
+      "errors": [
+        "Folder already exists",
+        "permission denied",
+        "invalid path"
+      ]
+    },
+    {
+      "operation": "delete_folder",
+      "purpose": "Deletes an existing directory.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the folder to delete."
+        },
+        {
+          "name": "recursive",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to delete recursively (including contents). Defaults to false."
+        },
+        {
+          "name": "force",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to force deletion even if read-only. Defaults to false."
+        }
+      ],
+      "cli_command": "faf delete-folder --path <path> [--recursive] [--force]",
+      "return_value": "Success status (boolean) on success, or error message on failure.",
+      "errors": [
+        "Folder not found",
+        "folder not empty (if recursive=false)",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "list_folder",
+      "purpose": "Lists the contents of a directory.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the folder to list."
+        },
+        {
+          "name": "recursive",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to list recursively. Defaults to false."
+        },
+        {
+          "name": "include_hidden",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to include hidden files/folders. Defaults to false."
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "required": false,
+          "description": "File extension or pattern to filter results (e.g., '*.txt')."
+        }
+      ],
+      "cli_command": "faf list-folder --path <path> [--recursive] [--include-hidden] [--filter <filter>]",
+      "return_value": "List of file/folder names or full paths on success, or error message on failure.",
+      "errors": [
+        "Folder not found",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "copy_folder",
+      "purpose": "Copies a folder and its contents from source to destination.",
+      "parameters": [
+        {
+          "name": "source_path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the source folder."
+        },
+        {
+          "name": "destination_path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the destination folder."
+        },
+        {
+          "name": "recursive",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to copy recursively. Defaults to true."
+        },
+        {
+          "name": "overwrite",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to overwrite existing files. Defaults to false."
+        }
+      ],
+      "cli_command": "faf copy-folder --source <source_path> --destination <destination_path> [--recursive] [--overwrite]",
+      "return_value": "Success status (boolean) and destination path on success, or error message on failure.",
+      "errors": [
+        "Source folder not found",
+        "destination exists",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "move_folder",
+      "purpose": "Moves a folder and its contents from source to destination.",
+      "parameters": [
+        {
+          "name": "source_path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the source folder."
+        },
+        {
+          "name": "destination_path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the destination folder."
+        },
+        {
+          "name": "overwrite",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to overwrite existing files. Defaults to false."
+        }
+      ],
+      "cli_command": "faf move-folder --source <source_path> --destination <destination_path> [--overwrite]",
+      "return_value": "Success status (boolean) and new path on success, or error message on failure.",
+      "errors": [
+        "Source folder not found",
+        "destination exists",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "get_folder_info",
+      "purpose": "Retrieves metadata about a folder.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the folder."
+        }
+      ],
+      "cli_command": "faf get-folder-info --path <path>",
+      "return_value": "Dictionary/object containing size, creation date, modification date, permissions, item count, etc., or error message on failure.",
+      "errors": [
+        "Folder not found",
+        "permission denied"
+      ]
+    }
+  ],
+  "system_operations": [
+    {
+      "operation": "get_cwd",
+      "purpose": "Gets the current working directory.",
+      "parameters": [],
+      "cli_command": "faf get-cwd",
+      "return_value": "Current working directory path as string.",
+      "errors": []
+    },
+    {
+      "operation": "change_directory",
+      "purpose": "Changes the current working directory.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The path to change to."
+        }
+      ],
+      "cli_command": "faf change-directory --path <path>",
+      "return_value": "Success status (boolean) and new directory path on success, or error message on failure.",
+      "errors": [
+        "Directory not found",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "path_exists",
+      "purpose": "Checks if a path exists.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The path to check."
+        }
+      ],
+      "cli_command": "faf path-exists --path <path>",
+      "return_value": "Boolean indicating existence.",
+      "errors": []
+    },
+    {
+      "operation": "get_path_type",
+      "purpose": "Determines if a path is a file or folder.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The path to check."
+        }
+      ],
+      "cli_command": "faf get-path-type --path <path>",
+      "return_value": "'file', 'folder', or 'unknown' on success, or error message on failure.",
+      "errors": [
+        "Path not found",
+        "permission denied"
+      ]
+    }
+  ],
+  "advanced_file_operations": [
+    {
+      "operation": "rename_file",
+      "purpose": "Renames a file.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the file to rename."
+        },
+        {
+          "name": "new_name",
+          "type": "string",
+          "required": true,
+          "description": "The new name for the file."
+        }
+      ],
+      "cli_command": "faf rename-file --path <path> --new-name <new_name>",
+      "return_value": "Success status (boolean) and new path on success, or error message on failure.",
+      "errors": [
+        "File not found",
+        "permission denied",
+        "name conflict"
+      ]
+    },
+    {
+      "operation": "compress_file",
+      "purpose": "Compresses a file into an archive.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the file to compress."
+        },
+        {
+          "name": "archive_path",
+          "type": "string",
+          "required": true,
+          "description": "The path for the output archive."
+        },
+        {
+          "name": "format",
+          "type": "string",
+          "required": false,
+          "description": "Archive format (zip, tar, gz). Defaults to zip."
+        }
+      ],
+      "cli_command": "faf compress-file --path <path> --archive <archive_path> [--format <format>]",
+      "return_value": "Success status (boolean) and archive path on success, or error message on failure.",
+      "errors": [
+        "File not found",
+        "permission denied",
+        "invalid format"
+      ]
+    },
+    {
+      "operation": "decompress_file",
+      "purpose": "Decompresses an archive.",
+      "parameters": [
+        {
+          "name": "archive_path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the archive."
+        },
+        {
+          "name": "destination",
+          "type": "string",
+          "required": true,
+          "description": "The destination directory."
+        }
+      ],
+      "cli_command": "faf decompress-file --archive <archive_path> --destination <destination>",
+      "return_value": "Success status (boolean) and extracted files list on success, or error message on failure.",
+      "errors": [
+        "Archive not found",
+        "permission denied",
+        "corrupted archive"
+      ]
+    },
+    {
+      "operation": "create_symlink",
+      "purpose": "Creates a symbolic link to a file.",
+      "parameters": [
+        {
+          "name": "target_path",
+          "type": "string",
+          "required": true,
+          "description": "The path to the target file."
+        },
+        {
+          "name": "link_path",
+          "type": "string",
+          "required": true,
+          "description": "The path for the symbolic link."
+        }
+      ],
+      "cli_command": "faf create-symlink --target <target_path> --link <link_path>",
+      "return_value": "Success status (boolean) and link path on success, or error message on failure.",
+      "errors": [
+        "Target not found",
+        "permission denied",
+        "link exists"
+      ]
+    },
+    {
+      "operation": "get_file_hash",
+      "purpose": "Calculates hash (MD5, SHA256) of a file.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the file."
+        },
+        {
+          "name": "algorithm",
+          "type": "string",
+          "required": false,
+          "description": "Hash algorithm. Defaults to SHA256."
+        }
+      ],
+      "cli_command": "faf get-file-hash --path <path> [--algorithm <algorithm>]",
+      "return_value": "Hash string on success, or error message on failure.",
+      "errors": [
+        "File not found",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "compare_files",
+      "purpose": "Compares two files for differences.",
+      "parameters": [
+        {
+          "name": "path1",
+          "type": "string",
+          "required": true,
+          "description": "Path to first file."
+        },
+        {
+          "name": "path2",
+          "type": "string",
+          "required": true,
+          "description": "Path to second file."
+        }
+      ],
+      "cli_command": "faf compare-files --path1 <path1> --path2 <path2>",
+      "return_value": "Comparison result (differences or identical) on success, or error message on failure.",
+      "errors": [
+        "File not found",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "set_file_attributes",
+      "purpose": "Sets file attributes (hidden, read-only).",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the file."
+        },
+        {
+          "name": "attributes",
+          "type": "object",
+          "required": true,
+          "description": "Attributes to set (e.g., {'hidden': true, 'readonly': false})."
+        }
+      ],
+      "cli_command": "faf set-file-attributes --path <path> --attributes <json_attributes>",
+      "return_value": "Success status (boolean) on success, or error message on failure.",
+      "errors": [
+        "File not found",
+        "permission denied"
+      ]
+    }
+  ],
+  "advanced_folder_operations": [
+    {
+      "operation": "rename_folder",
+      "purpose": "Renames a folder.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the folder to rename."
+        },
+        {
+          "name": "new_name",
+          "type": "string",
+          "required": true,
+          "description": "The new name for the folder."
+        }
+      ],
+      "cli_command": "faf rename-folder --path <path> --new-name <new_name>",
+      "return_value": "Success status (boolean) and new path on success, or error message on failure.",
+      "errors": [
+        "Folder not found",
+        "permission denied",
+        "name conflict"
+      ]
+    },
+    {
+      "operation": "compress_folder",
+      "purpose": "Compresses a folder into an archive.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the folder to compress."
+        },
+        {
+          "name": "archive_path",
+          "type": "string",
+          "required": true,
+          "description": "The path for the output archive."
+        },
+        {
+          "name": "format",
+          "type": "string",
+          "required": false,
+          "description": "Archive format. Defaults to zip."
+        }
+      ],
+      "cli_command": "faf compress-folder --path <path> --archive <archive_path> [--format <format>]",
+      "return_value": "Success status (boolean) and archive path on success, or error message on failure.",
+      "errors": [
+        "Folder not found",
+        "permission denied",
+        "invalid format"
+      ]
+    },
+    {
+      "operation": "get_folder_size",
+      "purpose": "Calculates the total size of a folder.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the folder."
+        }
+      ],
+      "cli_command": "faf get-folder-size --path <path>",
+      "return_value": "Total size in bytes on success, or error message on failure.",
+      "errors": [
+        "Folder not found",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "find_duplicates",
+      "purpose": "Finds duplicate files in a folder.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the folder to scan."
+        },
+        {
+          "name": "recursive",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to scan recursively. Defaults to true."
+        }
+      ],
+      "cli_command": "faf find-duplicates --path <path> [--recursive]",
+      "return_value": "List of duplicate file groups on success, or error message on failure.",
+      "errors": [
+        "Folder not found",
+        "permission denied"
+      ]
+    }
+  ],
+  "search_and_indexing": [
+    {
+      "operation": "search_files",
+      "purpose": "Searches for files matching criteria.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The directory to search in."
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "required": true,
+          "description": "Search query (name, content, etc.)."
+        },
+        {
+          "name": "recursive",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to search recursively. Defaults to true."
+        },
+        {
+          "name": "case_sensitive",
+          "type": "boolean",
+          "required": false,
+          "description": "Case sensitivity. Defaults to false."
+        }
+      ],
+      "cli_command": "faf search-files --path <path> --query <query> [--recursive] [--case-sensitive]",
+      "return_value": "List of matching file paths on success, or error message on failure.",
+      "errors": [
+        "Path not found",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "index_files",
+      "purpose": "Creates an index of files for faster searching.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The directory to index."
+        },
+        {
+          "name": "index_path",
+          "type": "string",
+          "required": false,
+          "description": "Path to save the index. Defaults to default location."
+        }
+      ],
+      "cli_command": "faf index-files --path <path> [--index-path <index_path>]",
+      "return_value": "Success status (boolean) and index path on success, or error message on failure.",
+      "errors": [
+        "Path not found",
+        "permission denied"
+      ]
+    }
+  ],
+  "permissions_and_security": [
+    {
+      "operation": "set_permissions",
+      "purpose": "Sets file/folder permissions.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the file/folder."
+        },
+        {
+          "name": "permissions",
+          "type": "string",
+          "required": true,
+          "description": "Permission string (e.g., '755' for Unix)."
+        }
+      ],
+      "cli_command": "faf set-permissions --path <path> --permissions <permissions>",
+      "return_value": "Success status (boolean) on success, or error message on failure.",
+      "errors": [
+        "Path not found",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "get_permissions",
+      "purpose": "Gets file/folder permissions.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the file/folder."
+        }
+      ],
+      "cli_command": "faf get-permissions --path <path>",
+      "return_value": "Permission string on success, or error message on failure.",
+      "errors": [
+        "Path not found",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "encrypt_file",
+      "purpose": "Encrypts a file.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the file."
+        },
+        {
+          "name": "password",
+          "type": "string",
+          "required": true,
+          "description": "Encryption password."
+        }
+      ],
+      "cli_command": "faf encrypt-file --path <path> --password <password>",
+      "return_value": "Success status (boolean) and encrypted file path on success, or error message on failure.",
+      "errors": [
+        "File not found",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "decrypt_file",
+      "purpose": "Decrypts a file.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The full path to the encrypted file."
+        },
+        {
+          "name": "password",
+          "type": "string",
+          "required": true,
+          "description": "Decryption password."
+        }
+      ],
+      "cli_command": "faf decrypt-file --path <path> --password <password>",
+      "return_value": "Success status (boolean) and decrypted file path on success, or error message on failure.",
+      "errors": [
+        "File not found",
+        "permission denied",
+        "wrong password"
+      ]
+    }
+  ],
+  "system_and_utility_operations": [
+    {
+      "operation": "get_disk_usage",
+      "purpose": "Gets disk usage information.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": false,
+          "description": "Path to check. Defaults to current drive."
+        }
+      ],
+      "cli_command": "faf get-disk-usage [--path <path>]",
+      "return_value": "Disk usage statistics on success, or error message on failure.",
+      "errors": [
+        "Permission denied"
+      ]
+    },
+    {
+      "operation": "create_bookmark",
+      "purpose": "Creates a bookmark for quick access.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "The path to bookmark."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Bookmark name."
+        }
+      ],
+      "cli_command": "faf create-bookmark --path <path> --name <name>",
+      "return_value": "Success status (boolean) on success, or error message on failure.",
+      "errors": [
+        "Path not found"
+      ]
+    },
+    {
+      "operation": "list_bookmarks",
+      "purpose": "Lists saved bookmarks.",
+      "parameters": [],
+      "cli_command": "faf list-bookmarks",
+      "return_value": "List of bookmarks on success, or error message on failure.",
+      "errors": []
+    },
+    {
+      "operation": "get_recent_files",
+      "purpose": "Gets list of recently accessed files.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of files to return. Defaults to 10."
+        }
+      ],
+      "cli_command": "faf get-recent-files [--limit <limit>]",
+      "return_value": "List of recent files on success, or error message on failure.",
+      "errors": []
+    },
+    {
+      "operation": "batch_rename",
+      "purpose": "Renames multiple files using patterns.",
+      "parameters": [
+        {
+          "name": "paths",
+          "type": "array",
+          "required": true,
+          "description": "List of file paths."
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "required": true,
+          "description": "Rename pattern."
+        }
+      ],
+      "cli_command": "faf batch-rename --paths <json_paths> --pattern <pattern>",
+      "return_value": "Success status (boolean) and renamed paths on success, or error message on failure.",
+      "errors": [
+        "File not found",
+        "permission denied"
+      ]
+    },
+    {
+      "operation": "monitor_changes",
+      "purpose": "Monitors a directory for changes.",
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "description": "Directory to monitor."
+        },
+        {
+          "name": "recursive",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to monitor recursively. Defaults to false."
+        }
+      ],
+      "cli_command": "faf monitor-changes --path <path> [--recursive]",
+      "return_value": "Stream of change events on success, or error message on failure.",
+      "errors": [
+        "Path not found",
+        "permission denied"
+      ]
+    }
+  ]
+}

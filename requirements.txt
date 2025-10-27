@@ -1,0 +1,14 @@
+# FAF Explorer Requirements
+
+# Core dependencies (none required for basic functionality)
+# All operations use built-in Python libraries
+
+# Optional dependencies for enhanced functionality
+# cryptography>=3.4.0  # For encryption/decryption features
+# chardet>=5.0.0      # For automatic encoding detection
+
+# Development dependencies
+pytest      # For running tests
+pytest-cov  # For test coverage
+black       # For code formatting
+flake8      # For linting
