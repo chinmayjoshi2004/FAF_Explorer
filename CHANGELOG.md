@@ -5,6 +5,60 @@ All notable changes to FAF Explorer will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2025-10-27
+
+### Added
+
+- **Graphical User Interface (GUI)**: Complete GUI implementation using Tkinter
+  - Windows Explorer-style interface with ribbon toolbar
+  - File tree view with lazy loading and expansion
+  - Operations header with grouped buttons (Clipboard, Organize, New, Open)
+  - Output panel for displaying file contents and operation logs
+  - Status bar with real-time feedback
+  - Context menus for right-click operations
+  - Auto-display of supported text file formats
+  - Search functionality with real-time filtering
+  - Keyboard shortcuts support (Ctrl+N, Ctrl+Shift+N, Delete, F5, Ctrl+F)
+
+- **GUI File Operations**:
+  - Create new files and folders through GUI buttons
+  - Delete files and folders with confirmation dialogs
+  - Rename files and folders
+  - Copy and paste files/folders with overwrite support
+  - Move files/folders (cut and paste) with overwrite support
+  - Open files with default system applications
+  - Display file/folder properties
+
+- **Enhanced Copy/Paste Functionality**:
+  - Clipboard operations for files and folders
+  - Overwrite confirmation dialogs
+  - Proper clipboard state management
+  - Support for both copy and move operations
+
+- **GUI Enhancements**:
+  - Professional styling with modern look and feel
+  - Responsive layout with paned windows
+  - Scrollbars for large content areas
+  - Icon placeholders (using PIL for colored rectangles)
+  - Error handling with user-friendly message boxes
+  - Loading states and progress feedback
+
+### Changed
+
+- Updated version from 0.2.0 to 1.0.0 to reflect major GUI addition
+- Enhanced project structure with dedicated `ui/` directory
+- Improved user experience with intuitive GUI interface
+- Maintained backward compatibility with existing CLI functionality
+
+### Technical Details
+
+- Added `ui/gui.py` with complete Tkinter-based GUI implementation
+- Integrated core file/folder operations into GUI event handlers
+- Added `if __name__ == "__main__"` block for direct GUI execution
+- Implemented lazy loading for file tree to handle large directories efficiently
+- Added proper event binding for keyboard shortcuts and mouse interactions
+- Integrated PIL for icon generation (fallback to text-only if unavailable)
+
 ## [0.2.0] - 2025-10-27
 
 ### Added

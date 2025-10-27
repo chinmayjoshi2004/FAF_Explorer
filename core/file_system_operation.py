@@ -101,7 +101,7 @@ def delete_file(path, force=False):
     - force (bool, optional): Whether to force deletion even if file is read-only. Defaults to False.
 
     Returns:
-    Success status (bool) on success, or error message on failure.
+    Success status (bool) and None on success, or False and error message on failure.
 
     Errors:
     - File not found
@@ -112,7 +112,7 @@ def delete_file(path, force=False):
         if force:
             os.chmod(path, 0o777)  # Make writable
         os.remove(path)
-        return True
+        return True, None
     except FileNotFoundError:
         return False, "File not found"
     except PermissionError:

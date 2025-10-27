@@ -1,8 +1,21 @@
 # FAF Explorer
 
-FAF Explorer is a powerful and user-friendly Command Line Interface (CLI) tool designed for comprehensive file and folder management. It provides a wide range of operations including file manipulation, folder handling, system utilities, and advanced features like searching, indexing, encryption, and more.
+FAF Explorer is a powerful and user-friendly file and folder management tool that provides both a Command Line Interface (CLI) and a Graphical User Interface (GUI). It offers comprehensive operations including file manipulation, folder handling, system utilities, and advanced features like searching, indexing, encryption, and more.
+
+**Version 1.0.0** - Now with full GUI support!
 
 ## Features
+
+### Graphical User Interface (GUI)
+
+- **Windows Explorer-style Interface**: Modern ribbon toolbar with grouped operations
+- **File Tree View**: Lazy-loading tree with expansion, icons, and metadata display
+- **Operations Header**: Clipboard, Organize, New, and Open operation groups
+- **Output Panel**: Real-time display of file contents and operation logs
+- **Search Functionality**: Real-time filtering of files and folders
+- **Context Menus**: Right-click menus for quick operations
+- **Keyboard Shortcuts**: Full keyboard support (Ctrl+N, Ctrl+Shift+N, Delete, F5, Ctrl+F)
+- **Auto File Preview**: Automatic display of supported text file formats
 
 ### File Operations
 
@@ -46,16 +59,17 @@ FAF Explorer is a powerful and user-friendly Command Line Interface (CLI) tool d
 
 ## Installation
 
-### Prerequisites
+### Standalone Software (Recommended)
 
-- Python 3.6 or higher
-- Required Python packages (install via pip):
+FAF Explorer is designed as standalone software, not a pip package. Download and run it directly:
 
-  ```bash
-  pip install -r requirements.txt
-  ```
+#### Option 1: Download Pre-built Executable
 
-### Installation Steps
+- Visit the [Releases](https://github.com/chinmayjoshi2004/faf-explorer/releases) page
+- Download the executable for your platform (Windows `.exe`, macOS `.app`, Linux binary)
+- Run the executable directly - no installation required!
+
+#### Option 2: Build from Source
 
 1. Clone the repository:
 
@@ -70,19 +84,99 @@ FAF Explorer is a powerful and user-friendly Command Line Interface (CLI) tool d
    pip install -r requirements.txt
    ```
 
-3. (Optional) Add to PATH for global access:
+3. Build the executable:
 
    ```bash
-   # On Linux/Mac
-   sudo ln -s $(pwd)/faf.py /usr/local/bin/faf
-
-   # On Windows
-   # Add the directory to your PATH environment variable
+   python faf-pm.py build
    ```
+
+   The executable will be created in the `dist/` directory.
+
+4. Run the executable:
+
+   ```bash
+   # On Windows
+   dist/FAF_Explorer.exe
+
+   # On Linux/macOS
+   ./dist/FAF_Explorer
+   ```
+
+#### Option 3: Run from Source (Development)
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/chinmayjoshi2004/faf-explorer.git
+   cd faf-explorer
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Run directly:
+
+   ```bash
+   python faf.py
+   ```
+
+### Project Management
+
+FAF Explorer includes a built-in project manager for installation, updates, and maintenance:
+
+```bash
+# Check system compatibility
+python faf-pm.py diagnostics
+
+# Install dependencies
+python faf-pm.py install
+
+# Check for updates
+python faf-pm.py update
+
+# Build executable
+python faf-pm.py build
+
+# Create desktop shortcut
+python faf-pm.py shortcut
+
+# Get project information
+python faf-pm.py info
+```
+
+### Prerequisites
+
+- Python 3.6 or higher (for building from source)
+- Required Python packages (install via pip):
+
+  ```bash
+  pip install -r requirements.txt
+  ```
 
 ## Usage
 
-### Basic Syntax
+### Graphical User Interface
+
+To launch the GUI version of FAF Explorer:
+
+```bash
+cd ui
+python gui.py
+```
+
+The GUI provides an intuitive Windows Explorer-style interface with:
+
+- File tree navigation on the left
+- Operations ribbon at the top
+- Output panel on the right for file previews and logs
+- Status bar with real-time feedback
+
+### Command Line Interface
+
+#### Basic Syntax
 
 ```bash
 faf <command> <subcommand> [options] [arguments]

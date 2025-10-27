@@ -42,7 +42,7 @@ def delete_folder(path, recursive=False, force=False):
     - force (bool, optional): Whether to force deletion even if read-only. Defaults to False.
 
     Returns:
-    Success status (bool) on success, or error message on failure.
+    Success status (bool) and None on success, or False and error message on failure.
 
     Errors:
     - Folder not found
@@ -54,7 +54,7 @@ def delete_folder(path, recursive=False, force=False):
             shutil.rmtree(path)
         else:
             os.rmdir(path)
-        return True
+        return True, None
     except FileNotFoundError:
         return False, "Folder not found"
     except OSError as e:

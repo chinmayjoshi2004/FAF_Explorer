@@ -1,0 +1,60 @@
+{
+  "name": "FAF Explorer",
+  "version": "1.0.0",
+  "description": "A powerful dual-interface file and folder management tool with CLI and GUI",
+  "author": "chinmayjoshi2004",
+  "license": "MIT",
+  "url": "https://github.com/chinmayjoshi2004/faf-explorer",
+  "keywords": [
+    "file-manager",
+    "folder-manager",
+    "cli",
+    "gui",
+    "file-explorer",
+    "file-operations",
+    "python",
+    "tkinter"
+  ],
+  "engines": {
+    "python": ">=3.6.0"
+  },
+  "main": "faf.py",
+  "gui": "ui/gui.py",
+  "scripts": {
+    "start": "python faf.py",
+    "gui": "python ui/gui.py",
+    "test": "python faf.py --pytest",
+    "format": "python faf.py dev format",
+    "lint": "python faf.py dev lint"
+  },
+  "dependencies": {
+    "pillow": ">=8.0.0"
+  },
+  "devDependencies": {
+    "black": ">=21.0.0",
+    "flake8": ">=3.9.0",
+    "pytest": ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chinmayjoshi2004/faf-explorer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chinmayjoshi2004/faf-explorer/issues"
+  },
+  "homepage": "https://github.com/chinmayjoshi2004/faf-explorer#readme",
+  "features": {
+    "cli": true,
+    "gui": true,
+    "file_operations": true,
+    "folder_operations": true,
+    "search": true,
+    "encryption": true,
+    "compression": true
+  },
+  "platforms": [
+    "Windows",
+    "Linux",
+    "macOS"
+  ]
+}
